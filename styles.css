@@ -1,0 +1,131 @@
+body,html
+{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    background-color: lightcoral;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 1000;
+    font-size: 120%;
+}
+
+button
+{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 1000 !important;
+    font-size: 70% !important;
+}
+
+.menue
+{
+    margin-top: 1%;
+    height: 5%;
+    width: 98%;
+    border: 4px solid #FCD200;
+    border-radius: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.init-test
+{
+    margin-top: 20px;
+}
+
+button
+{
+    
+    display: inline-block;
+    outline: 0;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px 0 rgb(213 217 217 / 50%);
+    background: #FFD814;
+    border: 1px solid #FCD200;
+    font-size: 13px;
+    padding: 0 11px;
+    text-align: center;
+    width: fit-content;
+    height: fit-content;
+    margin-left: 1%;
+    min-width: 200px;
+    font-weight: 500;
+    color: #0F1111;
+    
+}
+
+button:hover{
+    background: #F7CA00;
+    border-color: #F2C200;
+    box-shadow: 0 2px 5px 0 rgb(213 217 217 / 50%);
+}
+
+.test, .insert
+{
+    margin-top: 1%;
+    height: 88%;
+    width: 98%;
+    border: 4px solid #FCD200;
+    border-radius: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+}
+
+.title
+{
+
+    height: 5%;
+    width: 100%;
+    border: 4px solid #FCD200;
+    border-radius: 10px 10px 0px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #FCD200;
+}
+
+.ansver
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.test-content
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.test-content>*,.insert-content>*
+{
+    margin-top: 40px;
+}
+
+.insert-content
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.question
+{
+    text-align: center;
+    height: 40%;
+}
+
+p
+{
+    text-align: center;
+    
+}
