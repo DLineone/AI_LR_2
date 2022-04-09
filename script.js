@@ -53,6 +53,81 @@ let diagnoses = [
     [0, 0, 0, 1],
 ];
 
+let MeraDoveriya = [
+    0.25,
+    0.3,
+    0.45,
+    0.3,
+    0.45,
+    0.45,
+    0.45,
+    0.45,
+    0.45,
+    0.45,
+    0.45,
+    0.45,
+    0.45,
+    0.45,
+    0.45,
+    0.45
+];
+
+let MeraNeDoveriya = [
+    0.01,
+    0.01,
+    0.001,
+    0.01,
+    0.001,
+    0.001,
+    0.001,
+    0.001,
+    0.001,
+    0.001,
+    0.001,
+    0.001,
+    0.001,
+    0.001,
+    0.001,
+    0.001
+];
+
+function chnageMD_MND()
+{
+    for(let i = 0; i < Nillnes; i++)
+    {
+        let kolSympt = 0;
+        diagnoses[i].map((symp) => {
+            kolSympt = (sympt == 1) ? kolSympt++ : kolSympt;
+        });
+
+        switch(kolSympt)
+        {
+            case 0:
+                MeraDoveriya[i] = 0;
+                MeraNeDoveriya[i] = 0;
+                break;
+            case 1:
+                MeraDoveriya[i] = 0.45;
+                MeraNeDoveriya[i] = 0.1;
+                break;
+            case 2:
+                MeraDoveriya[i] = 0.4;
+                MeraNeDoveriya[i] = 0.1;
+                break;
+            case 3: 
+                MeraDoveriya[i] = 0.3;
+                MeraNeDoveriya[i] = 0.01;
+                break;
+            default:
+                MeraDoveriya[i] = 0.25;
+                MeraNeDoveriya[i] = 0.01;
+                break;
+        }
+    }
+}
+
+
+
 InitTest();
 
 toTestButton.onclick = function()
@@ -106,7 +181,6 @@ function InitCorrectIllnes()
 
 function InitCorrectIllnesIterable(iterator, ansver, iIllnes)
 {
-    console.log(iIllnes);
     insertContent.innerHTML = `<div class="question">Эта болезнь характеризуется этим симптомом: "${symptoms[iterator]}"?</div>
         <div class="ansver">
             <button class="yes">Да</button>
@@ -149,7 +223,9 @@ function CorrectCheck(ansver, iIllnes)
             }
         }
 
-        if((Nsymptoms1 > Nsymptoms2 && Nsymptoms2 === equals) || (Nsymptoms2 > Nsymptoms1 && Nsymptoms1 === equals) || (Nsymptoms1 === Nsymptoms2 && Nsymptoms1 === equals))
+        if((Nsymptoms1 > Nsymptoms2 && Nsymptoms2 === equals)   || 
+        (Nsymptoms2 > Nsymptoms1 && Nsymptoms1 === equals)      || 
+        (Nsymptoms1 === Nsymptoms2 && Nsymptoms1 === equals))
         {
             WrongCorrectError();
             return 0;
@@ -184,6 +260,7 @@ function CompCorrectIllnes(ansver, iIllnes)
         }
         toInsert();
     };
+    chnageMD_MND();
 }
 
 function InitInsertSymptom()
@@ -286,7 +363,7 @@ function CompleteInsertIllnes(ansver)
         }
         toInsert();
     };
-    
+    chnageMD_MND();
 }
 
 function InitTest()
@@ -295,10 +372,17 @@ function InitTest()
     let initTestButton = document.querySelector(".init-test");
     let iterator = 0;
     let ansver = [];
-    initTestButton.onclick = function () {revealTestIterable(iterator, ansver);};
+    let curentMD = [];
+    let curentMND = [];
+    diagnoses[0].map(() => {
+        curentMD.push(0);
+        curentMND.push(0);
+        return;
+    });
+    initTestButton.onclick = function () {revealTestIterable(iterator, ansver, curentMD, curentMND);};
 }
 
-function revealTestIterable(iterator, ansver)
+function revealTestIterable(iterator, ansver, curentMD, curentMND)
 {
     testContent.innerHTML = `<div class="question">У вас присутствует "${symptoms[iterator]}"?</div>
         <div class="ansver">
@@ -310,53 +394,148 @@ function revealTestIterable(iterator, ansver)
 
     buttonYes.onclick = function (){
         ansver.push(1);
+        for(let i = 0; i < curentMD.length; i++)
+        {
+            if(diagnoses[iterator][i] == 1)
+            {
+                curentMD[i] = curentMD[i] + MeraDoveriya[iterator] * (1 - curentMD[i]);
+                curentMND[i] = curentMND[i] + MeraNeDoveriya[iterator] * (1 - curentMND[i]);
+            }
+        }
         iterator++;
-
-        if(iterator < Nsymptoms) revealTestIterable(iterator, ansver);
-        else showAnsver(ansver);
+        if(iterator < Nsymptoms) revealTestIterable(iterator, ansver, curentMD, curentMND);
+        else showAnsver(ansver, curentMD, curentMND);
     }
 
     buttonNo.onclick = function (){
         ansver.push(0);
-        iterator++;
 
-        if(iterator < Nsymptoms) revealTestIterable(iterator, ansver);
-        else showAnsver(ansver);
+        iterator++;
+        if(iterator < Nsymptoms) revealTestIterable(iterator, ansver, curentMD, curentMND);
+        else showAnsver(ansver, curentMD, curentMND);
     }
 }
 
-function showAnsver(ansver)
+function showAnsver(ansver, curentMD, curentMND)
 {
-    let nIlnes = -1;
-    let compareAnsver = [];
-    for(let i = 0; i < Nillnes; i++)
-    {
-        compareAnsver = [];
-        for(let j = 0; j < Nsymptoms; j++)
-        {
-            compareAnsver.push(diagnoses[j][i]);
-        }
+    // let nIlnes = -1;
+    // let compareAnsver = [];
+    // for(let i = 0; i < Nillnes; i++)
+    // {
+    //     compareAnsver = [];
+    //     for(let j = 0; j < Nsymptoms; j++)
+    //     {
+    //         compareAnsver.push(diagnoses[j][i]);
+    //     }
 
-        if(compareAnsver.join() === ansver.join())
+    //     if(compareAnsver.join() === ansver.join())
+    //     {
+    //         nIlnes = i;
+    //         break;
+    //     }
+    // }
+
+    // if(nIlnes >= 0)
+    // {
+    //     testContent.innerHTML = `<p style = " text-align: center">Ваше заболевание "${illnes[nIlnes]}"! <br>Поздравляем!</p>`;
+    // }
+    // else
+    // {
+    //     testContent.innerHTML = `<p style = " text-align: center">Такого заборевания нету( <br>Может хотите его описать?</p>
+    //         <button class="toInsertButtonAns">Заполнение базы знаний</button>
+    //         <button class="toTestButtonAns">Пройти тест ещё раз</button>`;
+    //     let toInsertButtonAns = document.querySelector(".toInsertButtonAns");
+    //     toInsertButtonAns.onclick = function () {toInsert()};
+
+    //     let toTestButtonAns = document.querySelector(".toTestButtonAns");
+    //     toTestButtonAns.onclick = function () {toTest()};
+    // }
+
+    let KoefUverennosti = [];
+    for(let i = 0; i < diagnoses[0].length; i++)
+    {
+        KoefUverennosti.push(curentMD[i] - curentMND[i]);
+    }
+
+    testContent.innerHTML = `<table class = "tableansver">
+    <tr>
+        <th>Название болезни</th>
+        <th>Мера доверия</th>
+        <th>Мера недоверия</th>
+        <th>Коэффициент уверенности</th>
+    </tr>
+</table>`;
+
+    let table = document.querySelector(".tableansver");
+    for(let i = 0; i < diagnoses[0].length; i++)
+    {
+        
+        let text = `<tr>
+        <th>${illnes[i]}</th>
+        <th>${curentMD[i].toFixed(4)}</th>
+        <th>${curentMND[i].toFixed(4)}</th>
+        <th>${KoefUverennosti[i].toFixed(4)}</th>
+    </tr>`;
+        table.innerHTML+=text;
+    }
+
+    testContent.innerHTML += `<button class="torealansver">Перейти к ответу</button>`
+
+    let toRealAnsverButton = document.querySelector(".torealansver");
+    toRealAnsverButton.onclick = () => {
+        toRealAnsver(curentMD, curentMND, KoefUverennosti);
+    }
+
+}
+
+function toRealAnsver(curentMD, curentMND, KoefUverennosti)
+{
+    
+    testContent.innerHTML = `<table class = "tableansver">
+    <tr>
+        <th>Название болезни</th>
+        <th>Мера доверия</th>
+        <th>Мера недоверия</th>
+        <th>Коэффициент уверенности</th>
+    </tr>
+</table>`;
+
+    let poryadoc = [];
+    for(let i = 0; i < diagnoses[0].length; i++)
+    {
+        poryadoc.push(i);
+    }
+
+    for(let i = 0; i < diagnoses[0].length; i++)
+    {
+        for(let j = 0; j < diagnoses[0].length - 1; j++)
         {
-            nIlnes = i;
-            break;
+            if(KoefUverennosti[poryadoc[j]] < KoefUverennosti[poryadoc[j+1]])
+            {
+                [poryadoc[j], poryadoc[j+1]] = [poryadoc[j+1],poryadoc[j]];
+            }
         }
     }
 
-    if(nIlnes >= 0)
-    {
-        testContent.innerHTML = `<p style = " text-align: center">Ваше заболевание "${illnes[nIlnes]}"! <br>Поздравляем!</p>`;
-    }
-    else
-    {
-        testContent.innerHTML = `<p style = " text-align: center">Такого заборевания нету( <br>Может хотите его описать?</p>
-            <button class="toInsertButtonAns">Заполнение базы знаний</button>
-            <button class="toTestButtonAns">Пройти тест ещё раз</button>`;
-        let toInsertButtonAns = document.querySelector(".toInsertButtonAns");
-        toInsertButtonAns.onclick = function () {toInsert()};
+    
 
-        let toTestButtonAns = document.querySelector(".toTestButtonAns");
-        toTestButtonAns.onclick = function () {toTest()};
+    let table = document.querySelector(".tableansver");
+    for(let i = 0; i < diagnoses[0].length; i++)
+    {
+        if(KoefUverennosti[poryadoc[i]] < 0.5) continue;
+        let text = `<tr>
+        <th>${illnes[poryadoc[i]]}</th>
+        <th>${curentMD[poryadoc[i]].toFixed(4)}</th>
+        <th>${curentMND[poryadoc[i]].toFixed(4)}</th>
+        <th>${KoefUverennosti[poryadoc[i]].toFixed(4)}</th>
+    </tr>`;
+        table.innerHTML+=text;
+    }
+
+    testContent.innerHTML += `<button class="toTest">Пройти тест снова</button>`
+
+    let toTestButton = document.querySelector(".toTest");
+    toTestButton.onclick = () => {
+        InitTest();
     }
 }
