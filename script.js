@@ -54,79 +54,77 @@ let diagnoses = [
 ];
 
 let MeraDoveriya = [
-    0.25,
-    0.3,
-    0.45,
-    0.3,
-    0.45,
-    0.45,
-    0.45,
-    0.45,
-    0.45,
-    0.45,
-    0.45,
-    0.45,
-    0.45,
-    0.45,
-    0.45,
-    0.45
+    [0.25, 0.26, 0.24, 0.23],
+    [0.30, 0.31, 0.00, 0.29],
+    [0.45, 0.00, 0.00, 0.00],
+    [0.30, 0.32, 0.00, 0.31],
+    [0.46, 0.00, 0.00, 0.00],
+    [0.45, 0.00, 0.00, 0.00],
+    [0.44, 0.00, 0.00, 0.00],
+    [0.00, 0.43, 0.00, 0.00],
+    [0.00, 0.42, 0.00, 0.00],
+    [0.00, 0.00, 0.45, 0.00],
+    [0.00, 0.00, 0.46, 0.00],
+    [0.00, 0.00, 0.44, 0.00],
+    [0.00, 0.00, 0.47, 0.00],
+    [0.00, 0.00, 0.00, 0.47],
+    [0.00, 0.00, 0.00, 0.42],
+    [0.00, 0.00, 0.00, 0.43]
 ];
 
 let MeraNeDoveriya = [
-    0.01,
-    0.01,
-    0.001,
-    0.01,
-    0.001,
-    0.001,
-    0.001,
-    0.001,
-    0.001,
-    0.001,
-    0.001,
-    0.001,
-    0.001,
-    0.001,
-    0.001,
-    0.001
+    [0.0099, 0.0098, 0.0097, 0.0100],
+    [0.0095, 0.0085, 0.0000, 0.0081],
+    [0.0010, 0.0000, 0.0000, 0.0000],
+    [0.0100, 0.0093, 0.0000, 0.0094],
+    [0.0010, 0.0000, 0.0000, 0.0000],
+    [0.0009, 0.0000, 0.0000, 0.0000],
+    [0.0008, 0.0000, 0.0000, 0.0000],
+    [0.0000, 0.0011, 0.0000, 0.0000],
+    [0.0000, 0.0012, 0.0000, 0.0000],
+    [0.0000, 0.0000, 0.0011, 0.0000],
+    [0.0000, 0.0000, 0.0009, 0.0000],
+    [0.0000, 0.0000, 0.0008, 0.0000],
+    [0.0000, 0.0000, 0.0010, 0.0000],
+    [0.0000, 0.0000, 0.0000, 0.0009],
+    [0.0000, 0.0000, 0.0000, 0.0012],
+    [0.0000, 0.0000, 0.0000, 0.0011]
 ];
 
-function chnageMD_MND()
-{
-    for(let i = 0; i < Nillnes; i++)
-    {
-        let kolSympt = 0;
-        diagnoses[i].map((symp) => {
-            kolSympt = (sympt == 1) ? kolSympt++ : kolSympt;
-        });
+// function chnageMD_MND()
+// {
+//     for(let i = 0; i < Nillnes; i++)
+//     {
+//         let kolSympt = 0;
+//         diagnoses[i].map((symp) => {
+//             kolSympt = (sympt == 1) ? kolSympt++ : kolSympt;
+//         });
 
-        switch(kolSympt)
-        {
-            case 0:
-                MeraDoveriya[i] = 0;
-                MeraNeDoveriya[i] = 0;
-                break;
-            case 1:
-                MeraDoveriya[i] = 0.45;
-                MeraNeDoveriya[i] = 0.1;
-                break;
-            case 2:
-                MeraDoveriya[i] = 0.4;
-                MeraNeDoveriya[i] = 0.1;
-                break;
-            case 3: 
-                MeraDoveriya[i] = 0.3;
-                MeraNeDoveriya[i] = 0.01;
-                break;
-            default:
-                MeraDoveriya[i] = 0.25;
-                MeraNeDoveriya[i] = 0.01;
-                break;
-        }
-    }
-}
-
-
+//         switch(kolSympt)
+//         {
+//             case 0:
+//                 MeraDoveriya[i] = 0;
+//                 MeraNeDoveriya[i] = 0;
+//                 break;
+//             case 1:
+//                 MeraDoveriya[i] = 0.45;
+//                 MeraNeDoveriya[i] = 0.1;
+//                 break;
+//             case 2:
+//                 MeraDoveriya[i] = 0.4;
+//                 MeraNeDoveriya[i] = 0.1;
+//                 break;
+//             case 3: 
+//                 MeraDoveriya[i] = 0.3;
+//                 MeraNeDoveriya[i] = 0.01;
+//                 break;
+//             default:
+//                 MeraDoveriya[i] = 0.25;
+//                 MeraNeDoveriya[i] = 0.01;
+//                 break;
+//         }
+//     }
+// }
 
 InitTest();
 
@@ -257,10 +255,16 @@ function CompCorrectIllnes(ansver, iIllnes)
         for(let i = 0; i < Nsymptoms; i++)
         {
             diagnoses[i][iIllnes] = ansver[i];
+            for(let j = 0; j < diagnoses[0].length; j++)
+            {
+                MeraDoveriya[i][iIllnes] = (MeraDoveriya[i][j] > 0.000001) ? MeraDoveriya[i][j] : 0;
+                MeraNeDoveriya[i][iIllnes] = (MeraNeDoveriya[i][j] > 0.000001) ? MeraNeDoveriya[i][j] : 0;
+            }
+
         }
         toInsert();
     };
-    chnageMD_MND();
+    //chnageMD_MND();
 }
 
 function InitInsertSymptom()
@@ -360,10 +364,15 @@ function CompleteInsertIllnes(ansver)
         for(let i = 0; i < Nsymptoms; i++)
         {
             diagnoses[i].push(ansver[i]);
+            for(let j = 0; j < diagnoses[0].length; j++)
+            {
+                MeraDoveriya[i][iIllnes] = (MeraDoveriya[i][j] > 0.000001) ? MeraDoveriya[i][j] : 0;
+                MeraNeDoveriya[i][iIllnes] = (MeraNeDoveriya[i][j] > 0.000001) ? MeraNeDoveriya[i][j] : 0;
+            }
         }
         toInsert();
     };
-    chnageMD_MND();
+    //chnageMD_MND();
 }
 
 function InitTest()
@@ -398,8 +407,8 @@ function revealTestIterable(iterator, ansver, curentMD, curentMND)
         {
             if(diagnoses[iterator][i] == 1)
             {
-                curentMD[i] = curentMD[i] + MeraDoveriya[iterator] * (1 - curentMD[i]);
-                curentMND[i] = curentMND[i] + MeraNeDoveriya[iterator] * (1 - curentMND[i]);
+                curentMD[i] = curentMD[i] + MeraDoveriya[iterator][i] * (1 - curentMD[i]);
+                curentMND[i] = curentMND[i] + MeraNeDoveriya[iterator][i] * (1 - curentMND[i]);
             }
         }
         iterator++;
@@ -418,39 +427,6 @@ function revealTestIterable(iterator, ansver, curentMD, curentMND)
 
 function showAnsver(ansver, curentMD, curentMND)
 {
-    // let nIlnes = -1;
-    // let compareAnsver = [];
-    // for(let i = 0; i < Nillnes; i++)
-    // {
-    //     compareAnsver = [];
-    //     for(let j = 0; j < Nsymptoms; j++)
-    //     {
-    //         compareAnsver.push(diagnoses[j][i]);
-    //     }
-
-    //     if(compareAnsver.join() === ansver.join())
-    //     {
-    //         nIlnes = i;
-    //         break;
-    //     }
-    // }
-
-    // if(nIlnes >= 0)
-    // {
-    //     testContent.innerHTML = `<p style = " text-align: center">Ваше заболевание "${illnes[nIlnes]}"! <br>Поздравляем!</p>`;
-    // }
-    // else
-    // {
-    //     testContent.innerHTML = `<p style = " text-align: center">Такого заборевания нету( <br>Может хотите его описать?</p>
-    //         <button class="toInsertButtonAns">Заполнение базы знаний</button>
-    //         <button class="toTestButtonAns">Пройти тест ещё раз</button>`;
-    //     let toInsertButtonAns = document.querySelector(".toInsertButtonAns");
-    //     toInsertButtonAns.onclick = function () {toInsert()};
-
-    //     let toTestButtonAns = document.querySelector(".toTestButtonAns");
-    //     toTestButtonAns.onclick = function () {toTest()};
-    // }
-
     let KoefUverennosti = [];
     for(let i = 0; i < diagnoses[0].length; i++)
     {
